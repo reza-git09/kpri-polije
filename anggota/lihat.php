@@ -1,15 +1,17 @@
 <?php 
 session_start();
 // Proteksi halaman
-if (!isset($_SESSION['login'])) { header("Location: ../user/login.php"); exit; }
+if (!isset($_SESSION['login'])) { 
+    header("Location: ../user/login.php"); 
+    exit; 
+}
 include '../config/koneksi.php'; 
 
 // Variabel dasar
 $base_url = "http://" . $_SERVER['HTTP_HOST'] . "/kpri polije/"; 
-$active_menu = 'anggota'; 
 $role_saat_ini = $_SESSION['role'];
 
-// Query data: Diurutkan berdasarkan nama (A-Z)
+// Query data: Diurutkan berdasarkan id_anggota
 $query_sql = "SELECT * FROM tb_anggota ORDER BY id_anggota ASC";
 $query = mysqli_query($koneksi, $query_sql);
 ?>
@@ -19,7 +21,6 @@ $query = mysqli_query($koneksi, $query_sql);
 <head>
     <meta charset="UTF-8">
     <title>Data Anggota - KPRI POLIJE</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="icon" type="image/png" href="<?= $base_url ?>images/kpripolije.png">
@@ -68,8 +69,6 @@ $query = mysqli_query($koneksi, $query_sql);
                 <?php endif; ?>
             </div>
 
-            
-
             <table>
                 <thead>
                     <tr>
@@ -91,7 +90,7 @@ $query = mysqli_query($koneksi, $query_sql);
                     <tr class="data-row">
                         <td><?= $no++; ?></td>
                         <td class="id-data"><span class="id-badge"><?= $row['id_anggota']; ?></span></td>
-                        <td><img src="<?= $foto_path; ?>" style="width:40px; height:40px; border-radius:50%; cursor:pointer;" onclick="bukaFoto('<?= htmlspecialchars($row['nama']); ?>', '<?= $foto_path; ?>')"></td>
+                        <td><img src="<?= $foto_path; ?>" style="width:40px; height:40px; border-radius:50%; cursor:pointer;" onclick="bukaFoto('<?= htmlspecialchars($row['nama'], ENT_QUOTES); ?>', '<?= $foto_path; ?>')"></td>
                         <td class="nama-data"><strong><?= htmlspecialchars($row['nama']); ?></strong></td>
                         <td><?= htmlspecialchars($row['alamat']); ?></td>
                         <td><?= htmlspecialchars($row['no_hp']); ?></td>
@@ -117,7 +116,6 @@ $query = mysqli_query($koneksi, $query_sql);
                 let idText = row.querySelector(".id-data").innerText.toLowerCase();
                 let namaText = row.querySelector(".nama-data").innerText.toLowerCase();
                 
-                // Tampilkan jika cocok di ID atau di Nama
                 if (idText.includes(input) || namaText.includes(input)) {
                     row.style.display = "";
                 } else {

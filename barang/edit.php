@@ -83,61 +83,83 @@ if (isset($_POST['update'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Barang - KPRI POLIJE</title>
-    <!-- Bootstrap 5 & Google Fonts -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     
     <style>
         body {
             font-family: 'Poppins', sans-serif;
-            background-color: #f4f7f9;
+            background: #f1f5f9;
+            margin: 0;
         }
+
         .main-content {
-            margin-left: 260px; /* Menyesuaikan sidebar */
-            padding: 40px;
-        }
-        .card-edit {
-            background: white;
-            border-radius: 15px;
-            border: none;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-            max-width: 800px;
-            margin: auto;
+            margin-left: 260px;
             padding: 30px;
         }
+
+        .card-edit {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            padding: 35px;
+            max-width: 900px;
+            margin: auto;
+        }
+
         .form-label {
             font-weight: 600;
+            color: #334155;
             margin-bottom: 8px;
-            color: #333;
         }
-        .form-control, .form-select {
-            border-radius: 8px;
-            padding: 10px 15px;
-            border: 1px solid #dee2e6;
+
+        .form-control,
+        .form-select {
+            border-radius: 12px;
+            padding: 12px 15px;
+            border: 1px solid #dbe2ea;
+            box-shadow: none !important;
         }
+
+        .form-control:focus,
+        .form-select:focus {
+            border-color: #2563eb;
+        }
+
         .btn-simpan {
-            background-color: #10b981;
+            background: #10b981;
             border: none;
-            padding: 12px;
-            font-weight: 600;
-            border-radius: 8px;
+            border-radius: 12px;
+            padding: 14px;
             color: white;
+            font-weight: 600;
             transition: 0.3s;
         }
+
         .btn-simpan:hover {
-            background-color: #059669;
+            background: #059669;
         }
+
         .btn-batal {
-            color: #6c757d;
             text-decoration: none;
+            color: #64748b;
             font-size: 14px;
+            margin-top: 10px;
         }
+
         .preview-img {
-            border-radius: 8px;
+            width: 100px;
+            height: 100px;
             object-fit: cover;
-            border: 1px solid #ddd;
-            margin-bottom: 10px;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+        }
+
+        @media(max-width: 768px){
+            .main-content{
+                margin-left: 0;
+                padding: 20px;
+            }
         }
     </style>
 </head>
@@ -163,7 +185,7 @@ if (isset($_POST['update'])) {
                 </div>
                 <div class="col-md-3 mb-3">
                     <label class="form-label">Stok</label>
-                    <input type="number" name="stok" class="form-control" value="<?= $data['stok']; ?>" required>
+                    <input type="number" name="stok" class="form-control" value="<?= $data['stok']; ?>" min="0" oninput="if(this.value < 0) this.value = 0" required>
                 </div>
                 <div class="col-md-3 mb-3">
                     <label class="form-label">Satuan</label>
@@ -184,10 +206,10 @@ if (isset($_POST['update'])) {
             <div class="mb-4">
                 <label class="form-label">Foto Produk</label><br>
                 <div class="mb-2">
-                    <?php if($data['nama_gambar']): ?>
-                        <img src="../images/barang/<?= $data['nama_gambar']; ?>" width="100" height="100" class="preview-img">
+                    <?php if(!empty($data['nama_gambar'])): ?>
+                        <img src="../images/barang/<?= $data['nama_gambar']; ?>" class="preview-img">
                     <?php else: ?>
-                        <div class="preview-img bg-light d-flex align-items-center justify-content-center" style="width:100px; height:100px;">
+                        <div class="preview-img bg-light d-flex align-items-center justify-content-center">
                             <i class="bi bi-image text-muted"></i>
                         </div>
                     <?php endif; ?>

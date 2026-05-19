@@ -24,6 +24,7 @@ if (isset($_POST['submit'])) {
     $nominal        = mysqli_real_escape_string($koneksi, $_POST['nominal']);
     $tanggal        = mysqli_real_escape_string($koneksi, $_POST['tanggal']);
 
+    // Validasi di sisi server (PHP)
     if ($nominal <= 0) {
         $status_insert = "invalid_nominal";
     } else {
@@ -56,8 +57,6 @@ if (isset($_POST['submit'])) {
         body { margin: 0; font-family: 'Poppins', sans-serif; background: #f4f7fe; color: #333; }
         .main { margin-left: 260px; padding: 25px; box-sizing: border-box; transition: 0.3s; }
         @media (max-width: 768px) { .main { margin-left: 0; } }
-      .main-wrapper { margin-left: 260px; padding: 25px; box-sizing: border-box; }
-        
         .top-header { 
             display: flex; justify-content: space-between; align-items: center; 
             background: white; padding: 15px 25px; height: 50px;
@@ -74,7 +73,6 @@ if (isset($_POST['submit'])) {
             width: 100%; padding: 10px; border: 1px solid #e2e8f0; 
             border-radius: 8px; box-sizing: border-box; font-size: 14px; font-family: inherit;
         }
-        
         .btn-simpan { 
             background: #1a73e8; color: white; border: none; 
             padding: 12px; border-radius: 8px; width: 100%; font-weight: 600; cursor: pointer; 
@@ -127,7 +125,8 @@ if (isset($_POST['submit'])) {
 
                 <div class="form-group">
                     <label>Nominal Setoran (Rp)</label>
-                    <input type="number" name="nominal" class="form-control" placeholder="Contoh: 100000" required>
+                    <!-- Perbaikan: Tambah min="1" -->
+                    <input type="number" name="nominal" class="form-control" placeholder="Contoh: 100000" min="1" required>
                 </div>
 
                 <div class="form-group">
@@ -145,7 +144,7 @@ if (isset($_POST['submit'])) {
     <?php if($status_insert == "success"): ?>
         Swal.fire({ title: 'Berhasil!', text: 'Simpanan berhasil dicatat.', icon: 'success' }).then(() => { window.location = 'lihat.php'; });
     <?php elseif($status_insert == "invalid_nominal"): ?>
-        Swal.fire({ title: 'Gagal!', text: 'Nominal tidak valid.', icon: 'warning' });
+        Swal.fire({ title: 'Gagal!', text: 'Nominal tidak boleh nol atau negatif.', icon: 'warning' });
     <?php elseif($status_insert == "error"): ?>
         Swal.fire({ title: 'Gagal!', text: 'Terjadi kesalahan sistem.', icon: 'error' });
     <?php endif; ?>

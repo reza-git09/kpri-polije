@@ -12,6 +12,7 @@ $status_simpan = "";
 $error_msg = "";
 
 if (isset($_POST['submit'])) {
+    // Baris 15 aman selama $_POST['nama'] dikirim dari form dengan benar
     $nama   = mysqli_real_escape_string($koneksi, $_POST['nama']);
     $alamat = mysqli_real_escape_string($koneksi, $_POST['alamat']);
     $no_hp  = mysqli_real_escape_string($koneksi, $_POST['no_hp']);
@@ -54,7 +55,7 @@ if (isset($_POST['submit'])) {
     <link rel="icon" type="image/png" href="<?= $base_url ?>images/kpripolije.png">
     <style>
         body { margin: 0; font-family: 'Poppins', sans-serif; background: #f4f7fe; }
-       .main-wrapper { margin-left: 260px; padding: 25px; box-sizing: border-box; }
+        .main-wrapper { margin-left: 260px; padding: 25px; box-sizing: border-box; }
         
         .top-header { 
             display: flex; justify-content: space-between; align-items: center; 
@@ -87,15 +88,24 @@ if (isset($_POST['submit'])) {
             <form method="POST" enctype="multipart/form-data">
                 <div class="form-group">
                     <label>Nama Lengkap</label>
-                    <input type="text" name="nama" required>
+                    <input type="text" name="nama" placeholder="Masukkan nama lengkap" required>
                 </div>
                 <div class="form-group">
                     <label>Alamat</label>
-                    <textarea name="alamat" rows="2" required></textarea>
+                    <textarea name="alamat" rows="2" placeholder="Masukkan alamat" required></textarea>
                 </div>
                 <div class="form-group">
                     <label>Nomor WhatsApp</label>
-                    <input type="text" name="no_hp" required>
+                    <input 
+                        type="text" 
+                        name="no_hp" 
+                        maxlength="12"
+                        pattern="[0-9]{12}"
+                        placeholder="Masukkan Nomer Telepon"
+                        title="Nomor WhatsApp harus 12 digit angka"
+                        oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                        required
+                    >
                 </div>
                 <div class="form-group">
                     <label>Foto Anggota</label>

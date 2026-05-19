@@ -39,6 +39,11 @@ if (isset($_POST['update'])) {
     $tanggal = mysqli_real_escape_string($koneksi, $_POST['tanggal']);
     $status  = mysqli_real_escape_string($koneksi, $_POST['status']);
 
+    // 🔒 VALIDASI AGAR JUMLAH TIDAK MINUS
+    if ($jumlah < 1) {
+        $jumlah = 1;
+    }
+
     $update = mysqli_query($koneksi, "UPDATE tb_pinjaman SET 
                                       jumlah = '$jumlah', 
                                       tanggal = '$tanggal',
@@ -61,9 +66,8 @@ if (isset($_POST['update'])) {
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-        <link rel="icon" type="image/png" href="<?= $base_url ?>images/kpripolije.png">
+    <link rel="icon" type="image/png" href="<?= $base_url ?>images/kpripolije.png">
 
-    
     <style>
         :root { --primary: #4a90e2; --bg-body: #f4f7fe; --sidebar-width: 250px; }
         body { margin:0; font-family:'Poppins', sans-serif; display:flex; background: var(--bg-body); }
@@ -80,9 +84,12 @@ if (isset($_POST['update'])) {
 
     <div class="main">
         <div class="form-card">
-            <h2 style="text-align:center; color: var(--primary);"><i class="fa-solid fa-pen-to-square"></i> Edit Transaksi</h2>
+            <h2 style="text-align:center; color: var(--primary);">
+                <i class="fa-solid fa-pen-to-square"></i> Edit Transaksi
+            </h2>
             
             <form action="" method="POST">
+                
                 <div style="margin-bottom: 15px;">
                     <span class="label-bold">Peminjam:</span>
                     <input type="text" class="form-control" value="<?= htmlspecialchars($data['nama_anggota']); ?>" disabled>
@@ -94,39 +101,66 @@ if (isset($_POST['update'])) {
                 </div>
 
                 <div style="display: flex; gap: 15px; margin-bottom: 15px;">
+                    
                     <div style="flex: 1;">
                         <span class="label-bold">Tanggal:</span>
                         <input type="date" name="tanggal" class="form-control" value="<?= $data['tanggal']; ?>" required>
                     </div>
+
                     <div style="flex: 1;">
                         <span class="label-bold">Jumlah:</span>
-                        <input type="number" name="jumlah" class="form-control" value="<?= $data['jumlah']; ?>" required>
+                        <input 
+                            type="number" 
+                            name="jumlah" 
+                            class="form-control" 
+                            value="<?= $data['jumlah']; ?>" 
+                            min="1"
+                            oninput="if(this.value < 1) this.value = 1"
+                            required
+                        >
                     </div>
+
                 </div>
 
                 <div style="margin-bottom: 15px;">
                     <span class="label-bold">Status Utama:</span>
                     <select name="status" class="form-control" style="border-left: 5px solid var(--primary);">
-                        <option value="dipinjam" <?= (strtolower($data['status']) != 'kembali') ? 'selected' : ''; ?>>Sedang Dipinjam (Aktif)</option>
-                        <option value="kembali" <?= (strtolower($data['status']) == 'kembali') ? 'selected' : ''; ?>>Sudah Kembali (Selesai)</option>
+                        <option value="dipinjam" <?= (strtolower($data['status']) != 'kembali') ? 'selected' : ''; ?>>
+                            Sedang Dipinjam (Aktif)
+                        </option>
+                        <option value="kembali" <?= (strtolower($data['status']) == 'kembali') ? 'selected' : ''; ?>>
+                            Sudah Kembali (Selesai)
+                        </option>
                     </select>
-                    <small style="color: #94a3b8;">*Status ini menentukan apakah transaksi dianggap selesai atau tidak.</small>
+                    <small style="color: #94a3b8;">
+                        *Status ini menentukan apakah transaksi dianggap selesai atau tidak.
+                    </small>
                 </div>
 
                 <button type="submit" name="update" class="btn-save">
                     <i class="fa-solid fa-check-double"></i> Simpan Perubahan
                 </button>
                 
-                <a href="lihat.php" style="display:block; text-align:center; margin-top:15px; color:#94a3b8; text-decoration:none; font-size:13px;">Batal</a>
+                <a href="lihat.php" style="display:block; text-align:center; margin-top:15px; color:#94a3b8; text-decoration:none; font-size:13px;">
+                    Batal
+                </a>
             </form>
         </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <script>
         <?php if($status_proses == "success"): ?>
-            Swal.fire({ title: 'Update Berhasil!', icon: 'success', confirmButtonColor: '#4a90e2' }).then(() => { window.location='lihat.php'; });
+            Swal.fire({
+                title: 'Update Berhasil!',
+                icon: 'success',
+                confirmButtonColor: '#4a90e2'
+            }).then(() => {
+                window.location='lihat.php';
+            });
         <?php endif; ?>
     </script>
+
 </body>
 </html>
